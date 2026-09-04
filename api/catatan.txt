@@ -1,0 +1,23 @@
+install Lib JWT :
+composer require firebase/php-jwt
+
+---- membuat DATABASE
+CREATE DATABASE db_api;
+USE db_api;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('admin','user') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO users (username, password, role)
+VALUES (
+  'admin',
+  '$2y$12$Co5dYd3gE1atZz70/xL8N.Dr7QbCmny2xCAbnPxk/UpMyugK2AeWS',
+  'admin'
+);
+
+SELECT * FROM users;
