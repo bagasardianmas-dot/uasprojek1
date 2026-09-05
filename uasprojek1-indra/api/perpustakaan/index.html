@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Perpustakaan API</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+        .card h2 {
+            margin-bottom: 15px;
+            color: #3498db;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 8px;
+        }
+        .form-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        input, select, button {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        input, select {
+            flex: 1;
+            min-width: 150px;
+        }
+        button {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+        button.btn-delete {
+            background-color: #e74c3c;
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+        button.btn-delete:hover {
+            background-color: #c0392b;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: #2c3e50;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+        .badge-keluar { background-color: #e74c3c; }
+        .badge-masuk { background-color: #3498db; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📚 Management Perpustakaan</h1>
+
+    <!-- 1. DATA KATEGORI -->
+    <div class="card">
+        <h2>Kategori Buku</h2>
+        <form id="formKategori" class="form-group">
+            <input type="text" id="nama_kategori" placeholder="Nama Kategori" required>
+            <button type="submit">Tambah Kategori</button>
+        </form>
+        <table>
+            <thead>
+                <tr><th>ID</th><th>Nama Kategori</th><th></th></tr>
+            </thead>
+            <tbody id="tabelKategori">
+                <tr><td colspan="3">Memuat data...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 2. DATA BUKU -->
+    <div class="card">
+        <h2>Data Buku</h2>
+        <form id="formBuku" class="form-group">
+            <input type="text" id="judul" placeholder="Judul Buku" required>
+            <input type="text" id="penulis" placeholder="Penulis">
+            <select id="id_kategori"></select>
+            <input type="number" id="stok" placeholder="Stok" value="1" min="0" required>
+            <button type="submit">Tambah Buku</button>
+        </form>
+        <table>
+            <thead>
+                <tr><th>ID</th><th>Judul</th><th>Penulis</th><th>Kategori</th><th>Stok</th><th></th></tr>
+            </thead>
+            <tbody id="tabelBuku">
+                <tr><td colspan="6">Memuat data...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 3. DATA PENGGUNA -->
+    <div class="card">
+        <h2>Data Pengguna</h2>
+        <form id="formPengguna" class="form-group">
+            <input type="text" id="nama" placeholder="Nama Lengkap" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <button type="submit">Tambah Pengguna</button>
+        </form>
+        <table>
+            <thead>
+                <tr><th>ID</th><th>Nama</th><th>Email</th><th></th></tr>
+            </thead>
+            <tbody id="tabelPengguna">
+                <tr><td colspan="4">Memuat data...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 4. DATA TRANSAKSI BUKU -->
+    <div class="card">
+        <h2>Sirkulasi Keluar & Masuk Buku</h2>
+        <form id="formTransaksi" class="form-group">
+            <select id="id_pengguna_transaksi"></select>
+            <select id="id_buku_transaksi"></select>
+            <select id="jenis_transaksi">
+                <option value="keluar">Keluar (Pinjam)</option>
+                <option value="masuk">Masuk (Kembali)</option>
+            </select>
+            <button type="submit">Catat Transaksi</button>
+        </form>
+        <table>
+            <thead>
+                <tr><th>ID</th><th>Peminjam</th><th>Judul Buku</th><th>Jenis</th><th>Tanggal</th><th></th></tr>
+            </thead>
+            <tbody id="tabelTransaksi">
+                <tr><td colspan="6">Memuat data...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'perpustakaan.php';
+
+    async function apiCall(action, method = 'GET', body = null, id = null) {
+        let url = `${API_URL}?action=${action}`;
+        if (id) url += `&id=${id}`;
+        const options = { method };
+        if (body) {
+            options.headers = { 'Content-Type': 'application/json' };
+            options.body = JSON.stringify(body);
+        }
+        const res = await fetch(url, options);
+        return res.json();
+    }
+
+    // ===== KATEGORI =====
+    async function loadKategori() {
+        const json = await apiCall('kategori');
+        const tbody = document.getElementById('tabelKategori');
+        const select = document.getElementById('id_kategori');
+        tbody.innerHTML = '';
+        select.innerHTML = '';
+        (json.data || []).forEach(item => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.nama_kategori}</td>
+                    <td><button class="btn-delete" onclick="hapusKategori(${item.id})">Hapus</button></td>
+                </tr>`;
+            select.innerHTML += `<option value="${item.id}">${item.nama_kategori}</option>`;
+        });
+        if (!json.data || json.data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3">Belum ada kategori.</td></tr>';
+        }
+    }
+    async function hapusKategori(id) {
+        await apiCall('kategori', 'DELETE', null, id);
+        loadKategori();
+    }
+    document.getElementById('formKategori').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nama_kategori = document.getElementById('nama_kategori').value;
+        await apiCall('kategori', 'POST', { nama_kategori });
+        e.target.reset();
+        loadKategori();
+    });
+
+    // ===== BUKU =====
+    async function loadBuku() {
+        const json = await apiCall('buku');
+        const tbody = document.getElementById('tabelBuku');
+        const select = document.getElementById('id_buku_transaksi');
+        tbody.innerHTML = '';
+        select.innerHTML = '';
+        (json.data || []).forEach(item => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.judul}</td>
+                    <td>${item.penulis ?? '-'}</td>
+                    <td>${item.nama_kategori ?? '-'}</td>
+                    <td>${item.stok}</td>
+                    <td><button class="btn-delete" onclick="hapusBuku(${item.id})">Hapus</button></td>
+                </tr>`;
+            select.innerHTML += `<option value="${item.id}">${item.judul}</option>`;
+        });
+        if (!json.data || json.data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6">Belum ada buku.</td></tr>';
+        }
+    }
+    async function hapusBuku(id) {
+        await apiCall('buku', 'DELETE', null, id);
+        loadBuku();
+    }
+    document.getElementById('formBuku').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const judul = document.getElementById('judul').value;
+        const penulis = document.getElementById('penulis').value;
+        const id_kategori = document.getElementById('id_kategori').value;
+        const stok = document.getElementById('stok').value;
+        await apiCall('buku', 'POST', { judul, penulis, id_kategori, stok });
+        e.target.reset();
+        loadBuku();
+    });
+
+    // ===== PENGGUNA =====
+    async function loadPengguna() {
+        const json = await apiCall('pengguna');
+        const tbody = document.getElementById('tabelPengguna');
+        const select = document.getElementById('id_pengguna_transaksi');
+        tbody.innerHTML = '';
+        select.innerHTML = '';
+        (json.data || []).forEach(item => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.nama}</td>
+                    <td>${item.email}</td>
+                    <td><button class="btn-delete" onclick="hapusPengguna(${item.id})">Hapus</button></td>
+                </tr>`;
+            select.innerHTML += `<option value="${item.id}">${item.nama}</option>`;
+        });
+        if (!json.data || json.data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4">Belum ada data pengguna.</td></tr>';
+        }
+    }
+    async function hapusPengguna(id) {
+        await apiCall('pengguna', 'DELETE', null, id);
+        loadPengguna();
+    }
+    document.getElementById('formPengguna').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nama = document.getElementById('nama').value;
+        const email = document.getElementById('email').value;
+        await apiCall('pengguna', 'POST', { nama, email });
+        e.target.reset();
+        loadPengguna();
+    });
+
+    // ===== TRANSAKSI =====
+    async function loadTransaksi() {
+        const json = await apiCall('transaksi');
+        const tbody = document.getElementById('tabelTransaksi');
+        tbody.innerHTML = '';
+        (json.data || []).forEach(item => {
+            const badgeClass = item.jenis_transaksi === 'keluar' ? 'badge-keluar' : 'badge-masuk';
+            tbody.innerHTML += `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.peminjam}</td>
+                    <td>${item.judul_buku}</td>
+                    <td><span class="badge ${badgeClass}">${item.jenis_transaksi.toUpperCase()}</span></td>
+                    <td>${item.tanggal}</td>
+                    <td><button class="btn-delete" onclick="hapusTransaksi(${item.id})">Hapus</button></td>
+                </tr>`;
+        });
+        if (!json.data || json.data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6">Belum ada data transaksi.</td></tr>';
+        }
+    }
+    async function hapusTransaksi(id) {
+        await apiCall('transaksi', 'DELETE', null, id);
+        loadTransaksi();
+    }
+    document.getElementById('formTransaksi').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id_pengguna = document.getElementById('id_pengguna_transaksi').value;
+        const id_buku = document.getElementById('id_buku_transaksi').value;
+        const jenis_transaksi = document.getElementById('jenis_transaksi').value;
+        await apiCall('transaksi', 'POST', { id_pengguna, id_buku, jenis_transaksi });
+        loadTransaksi();
+        loadBuku(); 
+    });
+
+    loadKategori();
+    loadBuku();
+    loadPengguna();
+    loadTransaksi();
+</script>
+
+</body>
+</html>
